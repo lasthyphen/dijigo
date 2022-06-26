@@ -19,7 +19,7 @@ if [[ $# -eq 2 ]]; then
     evm_path=$2
 elif [[ $# -eq 0 ]]; then
     if [[ ! -d "$coreth_path" ]]; then
-        go get "github.com/lasthyphen/coreth@$coreth_version"
+        go get "github.com/lasthyphen/coreth@master"
     fi
 else
     echo "Invalid arguments to build coreth. Requires either no arguments (default) or two arguments to specify coreth directory and location to add binary."
@@ -27,9 +27,9 @@ else
 fi
 
 # Build Coreth
-echo "Building Coreth @ ${coreth_version} ..."
+echo "Building Coreth @ latest ..."
 cd "$coreth_path"
-go build -ldflags "-X github.com/lasthyphen/coreth/plugin/evm.Version=$coreth_version $static_ld_flags" -o "$evm_path" "plugin/"*.go
+go build -ldflags "-X github.com/lasthyphen/coreth/plugin/evm.Version=latest $static_ld_flags" -o "$evm_path" "plugin/"*.go
 cd "$AVALANCHE_PATH"
 
 # Building coreth + using go get can mess with the go.mod file.
