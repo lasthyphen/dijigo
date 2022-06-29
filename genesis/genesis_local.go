@@ -6,29 +6,11 @@ package genesis
 import (
 	"time"
 
-	"github.com/lasthyphen/dijigo/utils/constants"
-	"github.com/lasthyphen/dijigo/utils/crypto"
-	"github.com/lasthyphen/dijigo/utils/formatting"
 	"github.com/lasthyphen/dijigo/utils/units"
-	"github.com/lasthyphen/dijigo/utils/wrappers"
 	"github.com/lasthyphen/dijigo/vms/platformvm/reward"
 )
 
-// PrivateKey-vmRQiZeXEXYMyJhEiqdC2z5JhuDbxL8ix9UVvjgMu2Er1NepE => P-local1g65uqn6t77p656w64023nh8nd9updzmxyymev2
-// PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN => X-local18jma8ppw3nhx5r4ap8clazz0dps7rv5u00z96u
-// 56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027 => 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
-
-const (
-	VMRQKeyStr          = "vmRQiZeXEXYMyJhEiqdC2z5JhuDbxL8ix9UVvjgMu2Er1NepE"
-	VMRQKeyFormattedStr = constants.SecretKeyPrefix + VMRQKeyStr
-
-	EWOQKeyStr          = "ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN"
-	EWOQKeyFormattedStr = constants.SecretKeyPrefix + EWOQKeyStr
-)
-
 var (
-	VMRQKey *crypto.PrivateKeySECP256K1R
-	EWOQKey *crypto.PrivateKeySECP256K1R
 
 	localGenesisConfigJSON = `{
 		"networkID": 12345,
@@ -103,7 +85,7 @@ var (
 				"delegationFee": 62500
 			}
 		],
-		"cChainGenesis": "{\"config\":{\"chainId\":43112,\"homesteadBlock\":0,\"daoForkBlock\":0,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"apricotPhase1BlockTimestamp\":0,\"apricotPhase2BlockTimestamp\":0},\"nonce\":\"0x0\",\"timestamp\":\"0x0\",\"extraData\":\"0x00\",\"gasLimit\":\"0x5f5e100\",\"difficulty\":\"0x0\",\"mixHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"coinbase\":\"0x0000000000000000000000000000000000000000\",\"alloc\":{\"8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC\":{\"balance\":\"0x295BE96E64066972000000\"}},\"number\":\"0x0\",\"gasUsed\":\"0x0\",\"parentHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\"}",
+		"cChainGenesis": "{\"config\":{\"chainId\":43113,\"homesteadBlock\":0,\"daoForkBlock\":0,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"apricotPhase1BlockTimestamp\":0,\"apricotPhase2BlockTimestamp\":0},\"nonce\":\"0x0\",\"timestamp\":\"0x0\",\"extraData\":\"0x00\",\"gasLimit\":\"0x5f5e100\",\"difficulty\":\"0x0\",\"mixHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"coinbase\":\"0x0000000000000000000000000000000000000000\",\"alloc\":{\"8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC\":{\"balance\":\"0x295BE96E64066972000000\"}},\"number\":\"0x0\",\"gasUsed\":\"0x0\",\"parentHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\"}",
 		"message": "{{ fun_quote }}"
 	}`
 
@@ -132,24 +114,3 @@ var (
 		},
 	}
 )
-
-func init() {
-	errs := wrappers.Errs{}
-	vmrqBytes, err := formatting.Decode(formatting.CB58, VMRQKeyStr)
-	errs.Add(err)
-	ewoqBytes, err := formatting.Decode(formatting.CB58, EWOQKeyStr)
-	errs.Add(err)
-
-	factory := crypto.FactorySECP256K1R{}
-	vmrqIntf, err := factory.ToPrivateKey(vmrqBytes)
-	errs.Add(err)
-	ewoqIntf, err := factory.ToPrivateKey(ewoqBytes)
-	errs.Add(err)
-
-	if errs.Err != nil {
-		panic(errs.Err)
-	}
-
-	VMRQKey = vmrqIntf.(*crypto.PrivateKeySECP256K1R)
-	EWOQKey = ewoqIntf.(*crypto.PrivateKeySECP256K1R)
-}
