@@ -13,13 +13,13 @@ import (
 
 	"github.com/kardianos/osext"
 
-	"github.com/lasthyphen/dijigo/database/leveldb"
-	"github.com/lasthyphen/dijigo/database/memdb"
-	"github.com/lasthyphen/dijigo/database/rocksdb"
-	"github.com/lasthyphen/dijigo/genesis"
-	"github.com/lasthyphen/dijigo/utils/constants"
-	"github.com/lasthyphen/dijigo/utils/ulimit"
-	"github.com/lasthyphen/dijigo/utils/units"
+	"github.com/lasthyphen/beacongo/database/leveldb"
+	"github.com/lasthyphen/beacongo/database/memdb"
+	"github.com/lasthyphen/beacongo/database/rocksdb"
+	"github.com/lasthyphen/beacongo/genesis"
+	"github.com/lasthyphen/beacongo/utils/constants"
+	"github.com/lasthyphen/beacongo/utils/ulimit"
+	"github.com/lasthyphen/beacongo/utils/units"
 )
 
 // Results of parsing the CLI
@@ -120,9 +120,9 @@ func addNodeFlags(fs *flag.FlagSet) {
 		NetworkPeerListNonValidatorGossipSizeKey,
 		NetworkPeerListGossipFreqKey,
 	)
-	fs.Uint(NetworkPeerListNumValidatorIPsKey, 20, gossipHelpMsg)
-	fs.Uint(NetworkPeerListValidatorGossipSizeKey, 25, gossipHelpMsg)
-	fs.Uint(NetworkPeerListNonValidatorGossipSizeKey, 25, gossipHelpMsg)
+	fs.Uint(NetworkPeerListNumValidatorIPsKey, 2, gossipHelpMsg)
+	fs.Uint(NetworkPeerListValidatorGossipSizeKey, 2, gossipHelpMsg)
+	fs.Uint(NetworkPeerListNonValidatorGossipSizeKey, 2, gossipHelpMsg)
 	fs.Duration(NetworkPeerListGossipFreqKey, time.Minute, gossipHelpMsg)
 
 	// Public IP Resolution
@@ -149,7 +149,7 @@ func addNodeFlags(fs *flag.FlagSet) {
 
 	fs.Bool(NetworkCompressionEnabledKey, true, "If true, compress certain outbound messages. This node will be able to parse compressed inbound messages regardless of this flag's value")
 	fs.Duration(NetworkMaxClockDifferenceKey, time.Minute, "Max allowed clock difference value between this node and peers")
-	fs.Bool(NetworkAllowPrivateIPsKey, true, "Allows the node to initiate outbound connection attempts to peers with private IPs")
+		fs.Bool(NetworkAllowPrivateIPsKey, true, "Allows the node to initiate outbound connection attempts to peers with private IPs")
 	fs.Bool(NetworkRequireValidatorToConnectKey, false, "If true, this node will only maintain a connection with another node if this node is a validator, the other node is a validator, or the other node is a beacon")
 
 	// Benchlist
@@ -160,10 +160,10 @@ func addNodeFlags(fs *flag.FlagSet) {
 	// Router
 	fs.Duration(ConsensusGossipFrequencyKey, 10*time.Second, "Frequency of gossiping accepted frontiers")
 	fs.Duration(ConsensusShutdownTimeoutKey, 30*time.Second, "Timeout before killing an unresponsive chain")
-	fs.Uint(ConsensusGossipAcceptedFrontierSizeKey, 35, "Number of peers to gossip to when gossiping accepted frontier")
-	fs.Uint(ConsensusGossipOnAcceptSizeKey, 20, "Number of peers to gossip to each accepted container to")
+	fs.Uint(ConsensusGossipAcceptedFrontierSizeKey, 3, "Number of peers to gossip to when gossiping accepted frontier")
+	fs.Uint(ConsensusGossipOnAcceptSizeKey, 2, "Number of peers to gossip to each accepted container to")
 	fs.Uint(AppGossipNonValidatorSizeKey, 0, "Number of peers (which may be validators or non-validators) to gossip an AppGossip message to")
-	fs.Uint(AppGossipValidatorSizeKey, 10, "Number of validators to gossip an AppGossip message to")
+	fs.Uint(AppGossipValidatorSizeKey, 2, "Number of validators to gossip an AppGossip message to")
 
 	// Inbound Throttling
 	fs.Uint64(InboundThrottlerAtLargeAllocSizeKey, 6*units.MiB, "Size, in bytes, of at-large byte allocation in inbound message throttler")
@@ -210,7 +210,7 @@ func addNodeFlags(fs *flag.FlagSet) {
 	fs.Duration(NetworkHealthMaxTimeSinceMsgSentKey, time.Minute, "Network layer returns unhealthy if haven't sent a message for at least this much time")
 	fs.Duration(NetworkHealthMaxTimeSinceMsgReceivedKey, time.Minute, "Network layer returns unhealthy if haven't received a message for at least this much time")
 	fs.Float64(NetworkHealthMaxPortionSendQueueFillKey, 0.9, "Network layer returns unhealthy if more than this portion of the pending send queue is full")
-	fs.Uint(NetworkHealthMinPeersKey, 1, "Network layer returns unhealthy if connected to less than this many peers")
+	fs.Uint(NetworkHealthMinPeersKey, 2, "Network layer returns unhealthy if connected to less than this many peers")
 	fs.Float64(NetworkHealthMaxSendFailRateKey, .9, "Network layer reports unhealthy if more than this portion of attempted message sends fail")
 	// Router Health
 	fs.Float64(RouterHealthMaxDropRateKey, 1, "Node reports unhealthy if the router drops more than this portion of messages")
@@ -258,14 +258,14 @@ func addNodeFlags(fs *flag.FlagSet) {
 	fs.Uint(BootstrapAncestorsMaxContainersReceivedKey, 2000, "This node reads at most this many containers from an incoming Ancestors message")
 
 	// Consensus
-	fs.Int(SnowSampleSizeKey, 20, "Number of nodes to query for each network poll")
-	fs.Int(SnowQuorumSizeKey, 15, "Alpha value to use for required number positive results")
-	fs.Int(SnowVirtuousCommitThresholdKey, 15, "Beta value to use for virtuous transactions")
-	fs.Int(SnowRogueCommitThresholdKey, 20, "Beta value to use for rogue transactions")
-	fs.Int(SnowAvalancheNumParentsKey, 5, "Number of vertexes for reference from each new vertex")
-	fs.Int(SnowAvalancheBatchSizeKey, 30, "Number of operations to batch in each new vertex")
-	fs.Int(SnowConcurrentRepollsKey, 4, "Minimum number of concurrent polls for finalizing consensus")
-	fs.Int(SnowOptimalProcessingKey, 50, "Optimal number of processing vertices in consensus")
+	fs.Int(SnowSampleSizeKey, 2, "Number of nodes to query for each network poll")
+	fs.Int(SnowQuorumSizeKey, 2, "Alpha value to use for required number positive results")
+	fs.Int(SnowVirtuousCommitThresholdKey, 2, "Beta value to use for virtuous transactions")
+	fs.Int(SnowRogueCommitThresholdKey, 2, "Beta value to use for rogue transactions")
+	fs.Int(SnowAvalancheNumParentsKey, 2, "Number of vertexes for reference from each new vertex")
+	fs.Int(SnowAvalancheBatchSizeKey, 10, "Number of operations to batch in each new vertex")
+	fs.Int(SnowConcurrentRepollsKey, 2, "Minimum number of concurrent polls for finalizing consensus")
+	fs.Int(SnowOptimalProcessingKey, 10, "Optimal number of processing vertices in consensus")
 	fs.Int(SnowMaxProcessingKey, 1024, "Maximum number of processing items to be considered healthy")
 	fs.Duration(SnowMaxTimeProcessingKey, 2*time.Minute, "Maximum amount of time an item should be processing and still be healthy")
 
