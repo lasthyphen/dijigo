@@ -13,13 +13,13 @@ import (
 
 	"github.com/kardianos/osext"
 
-	"github.com/lasthyphen/beacongo/database/leveldb"
-	"github.com/lasthyphen/beacongo/database/memdb"
-	"github.com/lasthyphen/beacongo/database/rocksdb"
-	"github.com/lasthyphen/beacongo/genesis"
-	"github.com/lasthyphen/beacongo/utils/constants"
-	"github.com/lasthyphen/beacongo/utils/ulimit"
-	"github.com/lasthyphen/beacongo/utils/units"
+	"github.com/lasthyphen/dijigo/database/leveldb"
+	"github.com/lasthyphen/dijigo/database/memdb"
+	"github.com/lasthyphen/dijigo/database/rocksdb"
+	"github.com/lasthyphen/dijigo/genesis"
+	"github.com/lasthyphen/dijigo/utils/constants"
+	"github.com/lasthyphen/dijigo/utils/ulimit"
+	"github.com/lasthyphen/dijigo/utils/units"
 )
 
 // Results of parsing the CLI
